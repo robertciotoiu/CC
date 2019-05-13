@@ -1,0 +1,15 @@
+package main;
+
+public class MainConsole {
+	
+	public static void main(String args[])
+	{
+		//Define the states:
+		Hashtable states = new Hashtable();
+	}
+	
+	public static void automata()
+	{
+		
+	}
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="print" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="true" key="wholeword"/>
+		<list key="findhistory">
+			<item value="display"/>
+			<item value="op"/>
+			<item value="NFAState"/>
+			<item value="kleene"/>
+			<item value="system"/>
+			<item value="NFA"/>
+			<item value="NFAregex"/>
+			<item value="&lt;Trans&gt;"/>
+			<item value="Trans"/>
+			<item value="counter"/>
+			<item value="for"/>
+			<item value="obj"/>
+		</list>
+		<list key="replacehistory">
+			<item value="print"/>
+			<item value="operator"/>
+			<item value="NFAregex"/>
+			<item value="NFA"/>
+			<item value="&lt;Transition&gt;"/>
+			<item value="Transition"/>
+			<item value="east"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="284" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="391" key="DIALOG_HEIGHT"/>
+		<item value="1216" key="DIALOG_X_ORIGIN"/>
+		<item value="218" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

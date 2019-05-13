@@ -1,0 +1,229 @@
+package main;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class NFAregex {
+	
+	public static void main(String[] args) {
+		NFAregex NFAregex_of_input = compile("(a|(b(ab*(aa)*a)*b)*)*");
+		NFAregex_of_input.display();
+	}
+
+	public ArrayList<Integer> states;
+	public ArrayList<Transition> transitions;
+	public int final_state;
+
+	public NFAregex() {
+		this.states = new ArrayList<Integer>();
+		this.transitions = new ArrayList<Transition>();
+		this.final_state = 0;
+	}
+
+	public NFAregex(int size) {
+		this.states = new ArrayList<Integer>();
+		this.transitions = new ArrayList<Transition>();
+		this.final_state = 0;
+		this.setStateSize(size);
+	}
+
+	public NFAregex(char c) {
+		this.states = new ArrayList<Integer>();
+		this.transitions = new ArrayList<Transition>();
+		this.setStateSize(2);
+		this.final_state = 1;
+		this.transitions.add(new Transition(0, 1, c));
+	}
+
+	public void setStateSize(int size) {
+		for (int i = 0; i < size; i++)
+			this.states.add(i);
+	}
+
+	public void display() {
+		for (Transition t : transitions) {
+			System.out.println("(" + t.state_from + ", " + t.trans_symbol + ", " + t.state_to + ")");
+		}
+	}
+
+	public static NFAregex kleene(NFAregex n) {
+
+		NFAregex result = new NFAregex(n.states.size() + 2);
+		result.transitions.add(new Transition(0, 1, 'E'));
+
+		for (Transition t : n.transitions) {
+			result.transitions.add(new Transition(t.state_from + 1, t.state_to + 1, t.trans_symbol));
+		}
+
+		result.transitions.add(new Transition(n.states.size(), n.states.size() + 1, 'E'));
+		result.transitions.add(new Transition(n.states.size(), 1, 'E'));
+		result.transitions.add(new Transition(0, n.states.size() + 1, 'E'));
+		result.final_state = n.states.size() + 1;
+
+		return result;
+	}
+
+	public static NFAregex concat(NFAregex n, NFAregex m) {
+		m.states.remove(0);
+
+		for (Transition t : m.transitions) {
+			n.transitions.add(new Transition(t.state_from + n.states.size() - 1, t.state_to + n.states.size() - 1,
+					t.trans_symbol));
+		}
+
+		for (Integer s : m.states) {
+			n.states.add(s + n.states.size() + 1);
+		}
+
+		n.final_state = n.states.size() + m.states.size() - 2;
+		return n;
+	}
+
+	public static NFAregex union(NFAregex n, NFAregex m) {
+		NFAregex result = new NFAregex(n.states.size() + m.states.size() + 2);
+
+		result.transitions.add(new Transition(0, 1, 'E'));
+
+		for (Transition t : n.transitions) {
+			result.transitions.add(new Transition(t.state_from + 1, t.state_to + 1, t.trans_symbol));
+		}
+
+		result.transitions.add(new Transition(n.states.size(), n.states.size() + m.states.size() + 1, 'E'));
+		result.transitions.add(new Transition(0, n.states.size() + 1, 'E'));
+
+		for (Transition t : m.transitions) {
+			result.transitions.add(new Transition(t.state_from + n.states.size() + 1, t.state_to + n.states.size() + 1,
+					t.trans_symbol));
+		}
+
+		result.transitions
+				.add(new Transition(m.states.size() + n.states.size(), n.states.size() + m.states.size() + 1, 'E'));
+		result.final_state = n.states.size() + m.states.size() + 1;
+		return result;
+	}
+
+	public static boolean alpha(char c) {
+		return c >= 'a' && c <= 'z';
+	}
+
+	public static boolean alphabet(char c) {
+		return alpha(c) || c == 'E';
+	}
+
+	public static boolean regexOperator(char c) {
+		return c == '(' || c == ')' || c == '*' || c == '|';
+	}
+
+	public static boolean validRegExChar(char c) {
+		return alphabet(c) || regexOperator(c);
+	}
+
+	public static boolean validRegEx(String regex) {
+		if (regex.isEmpty())
+			return false;
+		for (char c : regex.toCharArray())
+			if (!validRegExChar(c))
+				return false;
+		return true;
+	}
+
+	public static NFAregex compile(String regex) {
+		if (!validRegEx(regex)) {
+			System.out.println("Invalid REGEX");
+			return new NFAregex();
+		}
+
+		Stack<Character> operators = new Stack<Character>();
+		Stack<NFAregex> operands = new Stack<NFAregex>();
+		Stack<NFAregex> concat_stack = new Stack<NFAregex>();
+		boolean ccflag = false;
+		char operator;
+		char c;
+		int para_count = 0;
+		NFAregex NFAregex1;
+		NFAregex NFAregex2;
+
+		for (int i = 0; i < regex.length(); i++) {
+			c = regex.charAt(i);
+			if (alphabet(c)) {
+				operands.push(new NFAregex(c));
+				if (ccflag) {
+					operators.push('.');
+				} else
+					ccflag = true;
+			} else {
+				if (c == ')') {
+					ccflag = false;
+					if (para_count == 0) {
+						System.out.println("Error: More end paranthesis " + "than beginning paranthesis");
+						System.exit(1);
+					} else {
+						para_count--;
+					}
+					while (!operators.empty() && operators.peek() != '(') {
+						operator = operators.pop();
+						if (operator == '.') {
+							NFAregex2 = operands.pop();
+							NFAregex1 = operands.pop();
+							operands.push(concat(NFAregex1, NFAregex2));
+						} else if (operator == '|') {
+							NFAregex2 = operands.pop();
+							if (!operators.empty() && operators.peek() == '.') {
+								concat_stack.push(operands.pop());
+								while (!operators.empty() && operators.peek() == '.') {
+									concat_stack.push(operands.pop());
+									operators.pop();
+								}
+								NFAregex1 = concat(concat_stack.pop(), concat_stack.pop());
+								while (concat_stack.size() > 0) {
+									NFAregex1 = concat(NFAregex1, concat_stack.pop());
+								}
+							} else {
+								NFAregex1 = operands.pop();
+							}
+							operands.push(union(NFAregex1, NFAregex2));
+						}
+					}
+				} else if (c == '*') {
+					operands.push(kleene(operands.pop()));
+					ccflag = true;
+				} else if (c == '(') { // if any other operator: push
+					operators.push(c);
+					para_count++;
+				} else if (c == '|') {
+					operators.push(c);
+					ccflag = false;
+				}
+			}
+		}
+		while (operators.size() > 0) {
+			if (operands.empty()) {
+				System.out.println("Invalid REGEX: Not balanced");
+				System.exit(1);
+			}
+			operator = operators.pop();
+			if (operator == '.') {
+				NFAregex2 = operands.pop();
+				NFAregex1 = operands.pop();
+				operands.push(concat(NFAregex1, NFAregex2));
+			} else if (operator == '|') {
+				NFAregex2 = operands.pop();
+				if (!operators.empty() && operators.peek() == '.') {
+					concat_stack.push(operands.pop());
+					while (!operators.empty() && operators.peek() == '.') {
+						concat_stack.push(operands.pop());
+						operators.pop();
+					}
+					NFAregex1 = concat(concat_stack.pop(), concat_stack.pop());
+					while (concat_stack.size() > 0) {
+						NFAregex1 = concat(NFAregex1, concat_stack.pop());
+					}
+				} else {
+					NFAregex1 = operands.pop();
+				}
+				operands.push(union(NFAregex1, NFAregex2));
+			}
+		}
+		return operands.pop();
+	}
+}

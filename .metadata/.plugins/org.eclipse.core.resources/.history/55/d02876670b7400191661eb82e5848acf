@@ -1,0 +1,106 @@
+package main;
+
+public class MainConsole {
+	private static int state = 1;
+	private static int state4_times = 0;
+	private static String input_save = "101";//also initial input;
+
+	public static void main(String args[]) {
+		String input = input_save;
+		// input = input.substring(1);
+		// System.out.println(input);
+		// while (input.length() != 0) {
+		// System.out.println(input.charAt(0));
+		//
+		// }
+		automata(input, state);
+	}
+
+	public static void automata(String input, int state) {
+
+		if (state == 4) {
+			if (input.length() == 0)
+				System.out.print("Final state reached");
+			else {
+				System.out.print("Final state reached, symbols still exists");
+			}
+		} else {
+			if (input.length() == 0) {
+				System.out.println("DEAD END");
+			} else {
+				int symbol = input.charAt(0);
+				System.out.print("state " + state + " -> ");
+				// input = input.substring(1);
+				switch (state) {
+				case 1:
+					if (symbol == '0') {
+						state = 1;
+
+						if (input.length() == 0) {
+							System.out.print("Dead end");
+							break;
+						} else {
+							input = input.substring(1);
+							automata(input, state);
+						}
+					} else if (symbol == '1') {
+						state = 2;
+						if (input.length() == 0) {
+							System.out.print("Dead end");
+							break;
+						} else {
+							System.out.println();
+							input = input.substring(1);
+							automata(input, state);
+						// System.out.print("state 1 -> ");
+						if (input.length() == 0) {
+							System.out.print("Dead end");
+							break;
+						} else {
+							input = input.substring(1);
+							automata(input, state);
+						}
+						}
+						// System.out.print("state 2 -> ");
+
+					}
+					break;
+				case 2:
+					if (symbol == '0' || symbol == '1') {
+						state = 3;
+						// System.out.print("state 2 -> ");
+						if (input.length() == 0) {
+							System.out.print("Dead end");
+						} else {
+							if (input.length() == 0) {
+								System.out.print("Dead end");
+								break;
+							} else {
+								input = input.substring(1);
+								automata(input, state);
+							}
+						}
+					}
+					break;
+				case 3:
+					if (symbol == '0' || symbol == '1') {
+						state = 4;
+						// System.out.print("state 2 -> ");
+						if (input.length() == 0) {
+							System.out.print("Dead end");
+						} else {
+							if (input.length() == 0) {
+								System.out.print("Dead end");
+								break;
+							} else {
+								input = input.substring(1);
+								automata(input, state);
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
+}

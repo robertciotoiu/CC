@@ -1,0 +1,60 @@
+package main;
+
+import java.util.ArrayList;
+/*
+class NFAState {
+	public static final int MAX_CHAR = 255;
+
+	public boolean isFinal = false;
+	private ArrayList<NFAState> onChar[] = new ArrayList[MAX_CHAR];
+	private ArrayList<NFAState> onEmpty = new ArrayList<NFAState>();
+
+	public void addCharEdge(char c, NFAState next) {
+		onChar[(int) c].add(next);
+	}
+
+	public void addEmptyEdge(NFAState next) {
+		onEmpty.add(next);
+	}
+
+	public NFAState() {
+		for (int i = 0; i < onChar.length; i++)
+			onChar[i] = new ArrayList<NFAState>();
+	}
+
+	public boolean matches(String s) {
+		return matches(s, new ArrayList<NFAState>());
+	}
+
+	private boolean matches(String s, ArrayList<NFAState> visited) {
+
+		if (visited.contains(this))
+			return false;
+
+		visited.add(this);
+
+		if (s.length() == 0) {
+			if (isFinal)
+				return true;
+			for (NFAState next : onEmpty) {
+				if (next.matches("", visited))
+					return true;
+			}
+			return false;
+		} else {
+			int c = (int) s.charAt(0);
+
+			for (NFAState next : onChar[c]) {
+				if (next.matches(s.substring(1)))
+					return true;
+			}
+
+			for (NFAState next : onEmpty) {
+				if (next.matches(s, visited))
+					return true;
+			}
+			return false;
+		}
+	}
+}
+*/

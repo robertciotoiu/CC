@@ -1,0 +1,22 @@
+package main;
+
+import java.util.Hashtable;
+
+public class MainConsole {
+	
+	public static void main(String args[])
+	{
+		//Define the states: 
+		Hashtable states = new Hashtable();
+		
+		//Symbols
+		int symbols[] = null;
+		
+		states.put(0, )
+	}
+	
+	public static void automata()
+	{
+		
+	}
+}

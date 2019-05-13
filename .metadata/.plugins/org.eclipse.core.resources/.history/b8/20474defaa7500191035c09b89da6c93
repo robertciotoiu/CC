@@ -1,0 +1,176 @@
+package main;
+
+import java.util.ArrayList;
+/*
+class NFAState {
+	public static final int MAX_CHAR = 255;
+
+	public boolean isFinal = false;
+	private ArrayList<NFAState> onChar[] = new ArrayList[MAX_CHAR];
+	private ArrayList<NFAState> onEmpty = new ArrayList<NFAState>();
+
+	public void addCharEdge(char c, NFAState next) {
+		onChar[(int) c].add(next);
+	}
+
+	public void addEmptyEdge(NFAState next) {
+		onEmpty.add(next);
+	}
+
+	public NFAState() {
+		for (int i = 0; i < onChar.length; i++)
+			onChar[i] = new ArrayList<NFAState>();
+	}
+
+	public boolean matches(String s) {
+		return matches(s, new ArrayList<NFAState>());
+	}
+
+	private boolean matches(String s, ArrayList<NFAState> visited) {
+
+		if (visited.contains(this))
+			return false;
+
+		visited.add(this);
+
+		if (s.length() == 0) {
+			if (isFinal)
+				return true;
+			for (NFAState next : onEmpty) {
+				if (next.matches("", visited))
+					return true;
+			}
+			return false;
+		} else {
+			int c = (int) s.charAt(0);
+
+			for (NFAState next : onChar[c]) {
+				if (next.matches(s.substring(1)))
+					return true;
+			}
+
+			for (NFAState next : onEmpty) {
+				if (next.matches(s, visited))
+					return true;
+			}
+			return false;
+		}
+	}
+}
+*/
+class NFAState
+{
+    /*
+     * WARNING:
+     *
+     * The maximum integer character code we'll match is 255, which
+     * is sufficient for the ASCII character set.
+     *
+     * If we were to use this on the Unicode character set, we'd get
+     * an array index out-of-bounds exception.
+     *
+     * A ``proper'' implementation of this would not use arrays but
+     * rather a dynamic data structure like Vector.
+     */
+    public static final int MAX_CHAR = 255 ;
+
+    public boolean isFinal               = false ;
+    private ArrayList<NFAState> onChar[] = new ArrayList[MAX_CHAR] ;
+    private ArrayList<NFAState> onEmpty  = new ArrayList() ;
+
+    /*
+     * Add a transition edge from this state to next which consumes
+     * the character c.
+     */
+    public void addCharEdge(char c, NFAState next) {
+	onChar[(int)c].add(next) ;
+    }
+
+    /*
+     * Add a transition edge from this state to next that does not
+     * consume a character.
+     */
+    public void addEmptyEdge(NFAState next) {
+	onEmpty.add(next) ;
+    }
+
+    public NFAState () {
+	for (int i = 0; i < onChar.length; i++)
+	    onChar[i] = new ArrayList() ;
+    }
+
+    public boolean matches(String s) {
+	return matches(s,new ArrayList()) ;
+    }
+
+    private boolean matches(String s, ArrayList visited) {
+	/*
+	 * When matching, we work character by character.
+	 *
+	 * If we're out of characters in the string, we'll check to
+	 * see if this state if final, or if we can get to a final
+	 * state from here through empty edges.
+	 *
+	 * If we're not out of characters, we'll try to consume a
+	 * character and then match what's left of the string.
+	 *
+	 * If that fails, we'll ask if empty-edge neighbors can match
+	 * the entire string.
+	 *
+	 * If that fails, the match fails.
+	 *
+	 * Note: Because we could have a circular loop of empty
+	 * transitions, we'll have to keep track of the states we
+	 * visited through empty transitions so we don't end up
+	 * looping forever.
+	 */
+
+	if (visited.contains(this)) 
+	    /* We've found a path back to ourself through empty edges;
+	     * stop or we'll go into an infinite loop. */
+	    return false ;
+	
+	/* In case we make an empty transition, we need to add this
+	 * state to the visited list. */
+	visited.add(this) ;
+
+	if (s.length() == 0) {
+	    /* The string is empty, so we match this string only if
+	     * this state is a final state, or we can reach a final
+	     * state without consuming any input. */
+	    if (isFinal)
+		return true ;
+
+	    /* Since this state is not final, we'll ask if any
+	     * neighboring states that we can reach on empty edges can
+	     * match the empty string. */
+	    for (NFAState next : onEmpty) {
+		if (next.matches("",visited))
+		    return true ;
+	    }
+	    return false ;
+	} else {
+	    /* In this case, the string is not empty, so we'll pull
+	     * the first character off and check to see if our
+	     * neighbors for that character can match the remainder of
+	     * the string. */
+
+	    int c = (int)s.charAt(0) ;
+
+	    for (NFAState next : onChar[c]) {
+		if (next.matches(s.substring(1)))
+		    return true ;
+	    }
+
+	    /* It looks like we weren't able to match the string by
+	     * consuming a character, so we'll ask our
+	     * empty-transition neighbors if they can match the entire
+	     * string. */
+	    for (NFAState next : onEmpty) {
+		if (next.matches(s,visited))
+		    return true ;
+	    }
+	    return false ;
+	}
+    }
+}
