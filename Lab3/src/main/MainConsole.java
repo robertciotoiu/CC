@@ -5,7 +5,7 @@ public class MainConsole {
 	private static int state4_times = 0;
 	private static String input_save = "110101010";// also initial input;
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		String input = input_save;
 		automata(input, state);
 	}

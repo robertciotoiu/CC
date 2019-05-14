@@ -9,7 +9,7 @@ public class MainConsole {
 	static Hashtable<Integer, String> east = new Hashtable<Integer, String>();
 	static Hashtable<Integer, String> west = new Hashtable<Integer, String>();
 
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws Exception {
 
 		List<String> actions = new ArrayList<String>();
 
