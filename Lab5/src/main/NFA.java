@@ -45,7 +45,7 @@ public class NFA extends NfaToDfa {
 		}
 	}
 
-	private String stateComponents(State newState, String letter) { 
+	private String stateComponents(State newState, String letter) {
 		// Find the next state
 		String name = "";
 		for (State state : programFunction) {
@@ -65,6 +65,5 @@ public class NFA extends NfaToDfa {
 		}
 		return name;
 	}
-
 
 }

@@ -2,26 +2,33 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="print" key="selection"/>
-		<item value="false" key="casesensitive"/>
+		<item value="Input" key="selection"/>
+		<item value="true" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
-		<item value="true" key="wholeword"/>
+		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="Alphabet"/>
+			<item value="alphabet"/>
+			<item value="q"/>
+			<item value="public static void main"/>
+			<item value="Automaton"/>
+			<item value="Nfa"/>
+			<item value="setnfa"/>
+			<item value="nfa"/>
+			<item value="system.out"/>
 			<item value="display"/>
 			<item value="op"/>
 			<item value="NFAState"/>
 			<item value="kleene"/>
 			<item value="system"/>
 			<item value="NFA"/>
-			<item value="NFAregex"/>
-			<item value="&lt;Trans&gt;"/>
-			<item value="Trans"/>
-			<item value="counter"/>
-			<item value="for"/>
-			<item value="obj"/>
 		</list>
 		<list key="replacehistory">
+			<item value="Input"/>
+			<item value="input"/>
+			<item value="NfaToDfa"/>
+			<item value="Test"/>
 			<item value="print"/>
 			<item value="operator"/>
 			<item value="NFAregex"/>
